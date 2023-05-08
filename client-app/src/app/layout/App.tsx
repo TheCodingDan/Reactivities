@@ -1,10 +1,11 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import axios from 'axios';
 import { Container } from 'semantic-ui-react';
 import { Activity } from '../models/activity';
 import NavBar from './NavBar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
 import {v4 as uuid} from 'uuid';
+import agent from '../api/agent';
+import LoadingComponents from './LoadingComponent';
 
 
 function App() {
@@ -16,12 +17,19 @@ function App() {
   //base na atividade selecionada
   const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined)
   const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
 
   useEffect(() => {
-    axios.get<Activity[]>('http://localhost:5000/api/activities')
-    .then(response => {
-      setActivities(response.data);
+    agent.Activities.list().then(response => {
+      let activities: Activity[] = [];
+      response.forEach(activity => {
+        activity.date = activity.date.split('T')[0];
+        activities.push(activity);
+      })
+      setActivities(activities);
+      setLoading(false);
     })
   }, [])
 
@@ -49,20 +57,37 @@ function App() {
   }
 
   function handleCreateOrEditActivity(activity: Activity){
-    activity.id 
-      // código para editar uma atividade existente
-      ? setActivities([...activities.filter(x => x.id !== activity.id), activity])
-      //código para criar uma nova atividade
-      : setActivities([...activities, {...activity, id: uuid()}]);
-
-      setEditMode(false);
-      setSelectedActivity(activity);
-
+    setSubmitting(true);
+    //se atividade existe
+    if(activity.id){
+      agent.Activities.update(activity).then(() => {
+        setActivities([...activities.filter(x => x.id !== activity.id), activity])
+        setSelectedActivity(activity);
+        setEditMode(false);
+        setSubmitting(false);
+      })
+      //se atividade não existe
+    } else {
+      activity.id = uuid();
+      agent.Activities.create(activity).then(() => {
+        setActivities([...activities, activity])
+        setSelectedActivity(activity);
+        setEditMode(false);
+        setSubmitting(false);
+      })
+    }
   }
 //a função filter vai criar uma nova lista de atividades sem a atividade com o id selecionado 
   function handleRemoveActivity(id: string){
-    setActivities([...activities.filter(x => x.id !== id)])
+    setSubmitting(true);
+    agent.Activities.delete(id).then(() => {
+      setActivities([...activities.filter(x => x.id !== id)])
+      setSubmitting(false);
+    })
+
   }
+
+  if (loading) return <LoadingComponents content='Loading this shit app' />
 
   return (
     <>
@@ -78,6 +103,7 @@ function App() {
           closeForm={handleFormClose}
           createOrEdit={handleCreateOrEditActivity}
           removeActivity={handleRemoveActivity}
+          submitting={submitting}
           />
         </Container>
     </>
