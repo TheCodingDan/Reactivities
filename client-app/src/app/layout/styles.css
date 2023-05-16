@@ -3,5 +3,67 @@ body{
 }
 
 .my-navbar{
-  background-image: linear-gradient(135deg, rgb(24,42,115) 0%, rgb(33, 138, 174) 69%, rgb(32,167,172) 89%) !important;
+  background-image: linear-gradient(180.8deg, rgb(139, 10, 130) 6.9%, rgb(73, 6, 70) 73.2%)!important;
+}
+
+h3{
+  color:mediumpurple !important;
+}
+h3:hover{
+  color: violet !important;
+}
+
+a{
+  color:mediumpurple !important;
+}
+a:hover{
+  color: violet !important;
+}
+
+a.custom-link {
+  color:#EAEAEA !important; /* Define a cor do link para preto */
+}
+
+a.custom-link:hover {
+  color: #EAEAEA;
+  /* Estilos adicionais para o link no hover, se necessário */
+}
+
+.react-calendar{
+  width: 100% !important;
+  border: none !important;
+  box-shadow: 0 1px 2px 0 rgba(34,36,38,.15) !important;
+}
+
+.masthead {
+  display: flex;
+  align-items: center;
+  background-image: linear-gradient(
+          135deg,
+          rgb(139, 10, 130) 0%,
+          rgb(73, 6, 70) 69%,
+          rgb(72,35,68) 89%
+  ) !important;
+  height: 100vh;
+}
+
+.masthead .ui.menu .ui.button,
+.ui.menu a.ui.inverted.button {
+  margin-left: 0.5em;
+}
+
+.masthead h1.ui.header {
+  font-size: 4em;
+  font-weight: normal;
+}
+
+.masthead h2 {
+  font-size: 1.7em;
+  font-weight: normal;
+}
+a.link-home{
+  color: #EAEAEA !important;
+}
+a.link-home:hover{
+  color: darkviolet !important;
 }

@@ -7,13 +7,13 @@ export default function NavBar()
     return(
         <Menu inverted fixed='top' className='my-navbar'>
             <Container>
-                <Menu.Item as={NavLink} to='/' header>
+                <Menu.Item as={NavLink} to='/' header className="custom-link">
                     <img src="/assets/logo.png" alt="logo" style={{marginRight:"10px"}}/>
                     Reactivities
                 </Menu.Item>
-                <Menu.Item as={NavLink} to='/activities' name="Activities"/>
+                <Menu.Item as={NavLink} to='/activities' name="Activities" className="custom-link"/>
                 <Menu.Item>
-                    <Button positive content='Create Activity' as={NavLink} to='/createActivity'/>
+                    <Button content='Create Activity' as={NavLink} to='/createActivity'/>
                 </Menu.Item>
 
             </Container>
