@@ -1,4 +1,6 @@
+using Application.Core;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -9,7 +11,7 @@ namespace Application.Activities
         //Command não retorna nada, por isso não usamos um parâmetro do tipo que estamos retornando aqui
         //essa é a principal diferença entre um Command e uma Query
         //Querys retornam data, Command Não
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             //Usaremos a Activity como seu parâmetro para passar um objeto da Activity
             //Para o Handler quando o criarmos
@@ -17,7 +19,14 @@ namespace Application.Activities
             public Activity Activity { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class CommandValidator : AbstractValidator<Command>{
+            public CommandValidator()
+            {
+                RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
+            }
+        }
+
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             //Precisamos inserir a DataContext dentro desse Constructor
             // para gravar alterações
@@ -30,13 +39,17 @@ namespace Application.Activities
                 _context = context;
 
             }
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 _context.Activities.Add(request.Activity);
 
-                await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync() > 0;
 
-                return Unit.Value;
+                if(!result){
+                    return Result<Unit>.Failure("Failed to create activity");
+                }
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }
