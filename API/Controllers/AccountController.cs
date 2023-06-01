@@ -65,8 +65,10 @@ namespace API.Controllers
 
             else 
             {
+                var error = string.Join(" ", result.Errors.Select(error => error.GetType()));
                 var errorDescription = string.Join(" ", result.Errors.Select(error => error.Description));
-                return BadRequest(errorDescription);
+                ModelState.AddModelError(error, errorDescription);
+                return ValidationProblem();
             }
     
         }

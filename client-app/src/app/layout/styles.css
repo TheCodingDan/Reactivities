@@ -43,11 +43,12 @@ a.custom-link:hover {
   display: flex;
   align-items: center;
   background-image: linear-gradient(
-          135deg,
-          rgb(139, 10, 130) 0%,
-          rgb(73, 6, 70) 69%,
-          rgb(72,35,68) 89%
-  ) !important;
+    135deg,
+    rgb(139, 10, 130) 0%,
+    rgb(80, 15, 90) 50%,
+    rgb(73, 6, 70) 69%,
+    rgba(80, 15, 77, 0.8) 89%
+  )!important;
   height: 100vh;
 }
 

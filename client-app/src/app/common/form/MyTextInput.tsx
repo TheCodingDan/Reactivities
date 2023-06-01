@@ -6,6 +6,7 @@ interface Props{
     placeholder: string;
     name: string;
     label?: string;
+    type?: string;
 }
 
 export default function MyTextInput(props: Props){
@@ -17,7 +18,7 @@ export default function MyTextInput(props: Props){
             </label>
             <input {...field} {...props} />
             {meta.touched && meta.error ? (
-                <Label basic color='red'>
+                <Label basic color='violet'>
                     {meta.error}
                 </Label>
             ) : null}
