@@ -1,7 +1,9 @@
 using Application.Core;
+using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Activities
@@ -19,7 +21,8 @@ namespace Application.Activities
             public Activity Activity { get; set; }
         }
 
-        public class CommandValidator : AbstractValidator<Command>{
+        public class CommandValidator : AbstractValidator<Command>
+        {
             public CommandValidator()
             {
                 RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
@@ -30,22 +33,36 @@ namespace Application.Activities
         {
             //Precisamos inserir a DataContext dentro desse Constructor
             // para gravar alterações
+            private readonly IUserAccessor _userAccessor;
 
             //_context é um objeto concreto da classe DataContext que vai ser utilizado dentro dessa classe Handler
             //para acessar o Banco de Dados
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _context = context;
 
             }
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
+
+                var attendee = new ActivityAttendee {
+                    AppUser = user,
+                    Activity = request.Activity,
+                    IsHost = true
+                };
+
+                request.Activity.Attendees.Add(attendee);
+
                 _context.Activities.Add(request.Activity);
 
                 var result = await _context.SaveChangesAsync() > 0;
 
-                if(!result){
+                if (!result)
+                {
                     return Result<Unit>.Failure("Failed to create activity");
                 }
 
