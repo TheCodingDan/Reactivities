@@ -22,7 +22,7 @@ export default observer(function ActivityDetails(){
     }, [id, loadActivity])
 
 
-    if (loadingInitial || !activity) return<LoadingComponents/>;
+    if (loadingInitial || !activity) return<LoadingComponents content='Loading activity...'/>;
 
     
     return(
