@@ -1,10 +1,9 @@
-import React, { SyntheticEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link} from "react-router-dom";
 import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
 import { format } from "date-fns";
 import ActivityListItemAttendee from "./ActivityListItemAttendee";
-import { useStore } from "../../../app/stores/store";
 
 interface Props {
     activity: Activity
@@ -12,7 +11,6 @@ interface Props {
 
 export default function ActivityListItem({activity}: Props) {
 
-    const {activityStore} = useStore();
 
     return(
         <Segment.Group>

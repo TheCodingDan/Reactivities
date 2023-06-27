@@ -42,8 +42,11 @@ export default class ActivityStore{
             const activities = await agent.Activities.list();
             activities.forEach(activity => {
                 this.setActivity(activity);
-              })
-              this.setLoadingInitial(false);
+            })
+            this.setLoadingInitial(false);
+            
+
+              
 
         } catch (error){
             console.log(error);
@@ -53,8 +56,8 @@ export default class ActivityStore{
 
     loadActivity = async (id: string) => {
         this.setLoadingInitial(true);
-        let activity = this.getActivity(id);
         try {
+            var activity = this.getActivity(id);
             activity = await agent.Activities.details(id);
             this.setActivity(activity);
             runInAction(() => this.selectedActivity = activity);
@@ -154,10 +157,12 @@ export default class ActivityStore{
                     this.selectedActivity.attendees = this.selectedActivity
                         .attendees?.filter(a => a.username !== user?.username)
                     this.selectedActivity.isGoing = false;
+                    this.setLoadingInitial(false);
                 } else{
                     const attendee = new Profile(user!);
                     this.selectedActivity?.attendees?.push(attendee);
                     this.selectedActivity!.isGoing = true;
+                    this.setLoadingInitial(false);
                 }
                 this.activityRegistry.set(this.selectedActivity!.id, this.selectedActivity!);
                 

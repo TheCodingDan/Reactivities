@@ -68,6 +68,7 @@ export default class ProfileStore{
                     this.profile.photos.find(p => p.id === photo.id)!.isMain = true;
                     this.profile.image = photo.url;
                     this.loading = false;
+                    store.activityStore.setLoadingInitial(false);
                 }
             })
             
@@ -87,6 +88,23 @@ export default class ProfileStore{
                     this.loading = false;
                 }
             });
+        } catch (error) {
+            console.log(error);
+            runInAction(() => this.loading = false);
+        }
+    }
+
+    updateProfile = async (profile: Partial<Profile>) => {
+        this.loading = true;
+        try {
+            await agent.Profiles.updateProfile(profile);
+            runInAction(() => {
+                if(profile.displayName && profile.displayName !== store.userStore.user?.displayName){
+                    store.userStore.setDisplayName(profile.displayName);
+                }
+                this.profile = {...this.profile, ...profile as Profile}
+                this.loading = false;
+            })
         } catch (error) {
             console.log(error);
             runInAction(() => this.loading = false);
