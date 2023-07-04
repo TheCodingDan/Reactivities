@@ -8,7 +8,7 @@ import ActivityFilters from "./ActivityFilters";
 
 export default observer(function ActivityDashboard(){
 
-    const {activityStore, profileStore} = useStore();
+    const {activityStore} = useStore();
     const {loadActivities, loadingInitial} = activityStore;
 
     useEffect(() => {

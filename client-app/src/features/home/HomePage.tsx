@@ -6,7 +6,7 @@ import LoginForm from "../users/LoginForm";
 import RegisterForm from "../users/RegisterForm";
 
 export default observer(function HomePage(){
-    const {userStore,modalStore, activityStore} = useStore();
+    const {userStore,modalStore} = useStore();
     
     return(
         <Segment inverted textAlign="center" vertical className="masthead">
