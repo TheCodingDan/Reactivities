@@ -31,7 +31,7 @@ export default function ActivityListItem({activity}: Props) {
                             </Item.Description>
                             {activity.isHost && (
                                 <Item.Description>
-                                    <Label basic color="purple">
+                                    <Label basic color="pink">
                                         You are hosting this activity
                                     </Label>
                                 </Item.Description>
@@ -67,7 +67,7 @@ export default function ActivityListItem({activity}: Props) {
                  <Button as={Link} to={`/activities/${activity.id}`} className="custom-link"
                         color='purple'
                         floated='right'
-                        icon='eye'
+                        content='See Activity'
                         />
                         
             
