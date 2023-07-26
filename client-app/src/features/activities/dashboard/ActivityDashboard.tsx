@@ -7,7 +7,6 @@ import ActivityFilters from "./ActivityFilters";
 import { PagingParams } from "../../../app/models/pagination";
 import InfiniteScroll from "react-infinite-scroller";
 import ActivityListItemPlaceholder from "./ActivityListItemPlaceHolder";
-import { profile } from "console";
 
 export default observer(function ActivityDashboard(){
 
